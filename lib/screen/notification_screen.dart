@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:notification_app/services/notification_service.dart';
+import 'login.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -102,8 +103,16 @@ class NotificationScreen extends StatelessWidget {
             },
             child: const Text('Scheduled Notification'),
           ),
-
-          // Placeholder for the notification buttons
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            child: const Text('Go to Login Screen'),
+          ),
         ],
       ),
     );

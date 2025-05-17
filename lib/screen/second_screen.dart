@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
@@ -17,6 +18,16 @@ class SecondScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: const Text('Go to Home'),
+            ),
+            const SizedBox(height: 20),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              child: const Text('Go to Login Screen'),
             ),
           ],
         ),
