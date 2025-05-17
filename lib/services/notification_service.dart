@@ -5,7 +5,6 @@ import 'package:notification_app/screen/second_screen.dart';
 
 class NotificationService {
   static Future<void> initializeNotification() async {
-    // Initialize Awesome Notifications
     await AwesomeNotifications().initialize(
       null,
       [
@@ -31,14 +30,12 @@ class NotificationService {
       debug: true,
     );
 
-    // Request notification permissions
     await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
 
-    // Set notification listeners
     await AwesomeNotifications().setListeners(
       onActionReceivedMethod: _onActionReceivedMethod,
       onNotificationCreatedMethod: _onNotificationCreateMethod,
@@ -46,8 +43,6 @@ class NotificationService {
       onDismissActionReceivedMethod: _onDismissActionReceivedMethod,
     );
   }
-
-  // Listeners
 
   static Future<void> _onNotificationCreateMethod(
     ReceivedNotification receivedNotification,
@@ -74,7 +69,6 @@ class NotificationService {
     final payload = receivedNotification.payload;
     if (payload == null) return;
     if (payload['navigate'] == 'true') {
-      debugPrint(MyApp.navigatorKey.currentContext.toString());
       Navigator.push(
         MyApp.navigatorKey.currentContext!,
         MaterialPageRoute(builder: (_) => const SecondScreen()),

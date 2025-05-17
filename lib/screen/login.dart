@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       if (!context.mounted) return;
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.pushReplacementNamed(context, 'notification');
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorCode = e.code;
