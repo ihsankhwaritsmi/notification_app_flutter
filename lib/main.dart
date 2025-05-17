@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:notification_app/screen/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:notification_app/firebase_options.dart';
+import 'package:notification_app/screen/home.dart';
+import 'package:notification_app/screen/login.dart';
+import 'package:notification_app/screen/notification_screen.dart';
+import 'package:notification_app/screen/register.dart';
 import 'package:notification_app/screen/second_screen.dart';
 import 'package:notification_app/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.initializeNotification();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
@@ -18,14 +24,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // return MaterialApp(
+    //   title: 'Notification Demo',
+    //   routes: {
+    //     'home': (context) => const NotificationScreen(),
+    //     'second': (context) => const SecondScreen(),
+    //   },
+    //   initialRoute: 'home',
+    //   navigatorKey: navigatorKey,
+    // );
     return MaterialApp(
-      title: 'Notification Demo',
+      initialRoute: 'login',
       routes: {
         'home': (context) => const HomeScreen(),
-        'second': (context) => const SecondScreen(),
+        'login': (context) => const LoginScreen(),
+        'register': (context) => const RegisterScreen(),
       },
-      initialRoute: 'home',
-      navigatorKey: navigatorKey,
     );
   }
 }
