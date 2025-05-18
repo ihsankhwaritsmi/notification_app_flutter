@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notification_app/services/notification_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -36,7 +37,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      navigateLogin();
+      NotificationService.createNotification(
+        id: 11,
+        title: 'Registration Successful',
+        body: 'Account successfully registered',
+      );
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!context.mounted) return;
+        navigateLogin();
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorCode = e.code;

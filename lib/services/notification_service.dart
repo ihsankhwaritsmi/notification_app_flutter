@@ -65,7 +65,7 @@ class NotificationService {
   static Future<void> _onActionReceivedMethod(
     ReceivedNotification receivedNotification,
   ) async {
-    debugPrint('Notification action received');
+    debugPrint('Notification action received: ${receivedNotification.id}');
     final payload = receivedNotification.payload;
     if (payload == null) return;
     if (payload['navigate'] == 'true') {
@@ -92,29 +92,43 @@ class NotificationService {
   }) async {
     assert(!scheduled || (scheduled && interval != null));
 
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: 'basic_channel',
-        title: title,
-        body: body,
-        actionType: actionType,
-        notificationLayout: notificationLayout,
-        summary: summary,
-        category: category,
-        payload: payload,
-        bigPicture: bigPicture,
-      ),
-      actionButtons: actionButtons,
-      schedule:
-          scheduled
-              ? NotificationInterval(
-                interval: interval,
-                timeZone:
-                    await AwesomeNotifications().getLocalTimeZoneIdentifier(),
-                preciseAlarm: true,
-              )
-              : null,
+    debugPrint(
+      'Creating notification with id: $id, title: $title, body: $body',
     );
+
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      debugPrint('Notifications not allowed');
+      return;
+    }
+
+    try {
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: title,
+          body: body,
+          actionType: actionType,
+          notificationLayout: notificationLayout,
+          summary: summary,
+          category: category,
+          payload: payload,
+          bigPicture: bigPicture,
+        ),
+        actionButtons: actionButtons,
+        schedule:
+            scheduled
+                ? NotificationInterval(
+                  interval: interval,
+                  timeZone:
+                      await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+                  preciseAlarm: true,
+                )
+                : null,
+      );
+    } catch (e) {
+      debugPrint('Error creating notification: $e');
+    }
   }
 }

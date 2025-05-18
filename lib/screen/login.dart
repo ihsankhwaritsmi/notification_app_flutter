@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notification_app/services/notification_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,11 +33,39 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       if (!context.mounted) return;
-      Navigator.pushReplacementNamed(context, 'notification');
+      debugPrint('Login successful, creating notification');
+      NotificationService.createNotification(
+        id: 8,
+        title: 'Login Successful',
+        body: 'Login successfully for email ${_emailController.text}',
+      );
+      // final navigator = Navigator.of(context);
+      // Future.delayed(const Duration(milliseconds: 500), () {
+      //   if (!context.mounted) return;
+      //   Navigator.of(context).pushReplacementNamed('notification');
+      // });
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('notification');
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorCode = e.code;
       });
+      if (e.code == 'wrong-password') {
+        debugPrint('Wrong password, creating notification');
+        NotificationService.createNotification(
+          id: 9,
+          title: 'Login Failed',
+          body: 'Wrong password',
+        );
+      } else if (e.code == 'user-not-found') {
+        debugPrint('User not found, creating notification');
+        NotificationService.createNotification(
+          id: 10,
+          title: 'Login Failed',
+          body: 'Email hasn\'t registered, please register before login',
+        );
+      }
     }
 
     setState(() {
